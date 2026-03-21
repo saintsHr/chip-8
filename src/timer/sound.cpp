@@ -2,14 +2,15 @@
 
 namespace chip::Timer {
 
-uint16_t Sound::data_ = 0x0000;
+uint8_t Sound::data_ = 0x00;
 
-void Sound::write(uint16_t data) {
+void Sound::write(uint8_t data) {
     data_ = data;
 }
 
 void Sound::step() {
-    if (data_ > 0x0000) data_--;
+    if (data_ > 0x00) data_--;
+    // beep here later
 }
 
 }

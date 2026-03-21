@@ -7,10 +7,10 @@ namespace chip::Timer {
 class Delay {
 public:
     static void step();
-    static void write(uint16_t data);
+    static void write(uint8_t data);
 private:
     Delay() {}
-    static uint16_t data_;
+    static uint8_t data_;
 };
 
 }

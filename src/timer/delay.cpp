@@ -2,14 +2,14 @@
 
 namespace chip::Timer {
 
-uint16_t Delay::data_ = 0x0000;
+uint8_t Delay::data_ = 0x00;
 
-void Delay::write(uint16_t data) {
+void Delay::write(uint8_t data) {
     data_ = data;
 }
 
 void Delay::step() {
-    if (data_ > 0x0000) data_--;
+    if (data_ > 0x00) data_--;
 }
 
 }
