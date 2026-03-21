@@ -1,6 +1,6 @@
 #include "memory/stack.hpp"
 
-namespace chip {
+namespace chip::Memory {
 
 uint16_t Stack::data_[16] = {0x0000};
 uint8_t Stack::sp_ = 0x00;

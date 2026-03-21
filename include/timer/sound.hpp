@@ -2,14 +2,14 @@
 
 #include <stdint.h>
 
-namespace chip::Memory {
+namespace chip::Timer {
 
-class Index {
+class Sound {
 public:
+    static void step();
     static void write(uint16_t data);
-    static uint16_t read();
 private:
-    Index() {}
+    Sound() {}
     static uint16_t data_;
 };
 

@@ -1,6 +1,6 @@
 #include "memory/registers.hpp"
 
-namespace chip {
+namespace chip::Memory {
 
 uint8_t Registers::data_[16] = {0x00};
 

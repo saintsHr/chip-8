@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-namespace chip {
+namespace chip::Memory {
 
 class Registers {
 public:

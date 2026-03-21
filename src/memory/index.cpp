@@ -1,6 +1,6 @@
 #include "memory/index.hpp"
 
-namespace chip {
+namespace chip::Memory {
 
 uint16_t Index::data_ = 0x0000;
 

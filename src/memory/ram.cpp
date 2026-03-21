@@ -1,6 +1,6 @@
 #include "memory/ram.hpp"
 
-namespace chip {
+namespace chip::Memory {
 
 uint8_t Memory::data_[4096] = {0x00};
 

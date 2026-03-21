@@ -1,6 +1,6 @@
 #include "memory/program.hpp"
 
-namespace chip {
+namespace chip::Memory {
 
 uint16_t Program::data_ = 0x0000;
 
