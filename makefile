@@ -10,7 +10,7 @@ OBJ := $(patsubst src/%.cpp,build/%.o,$(SRC))
 CXX := g++
 DEPFLAGS := -MMD -MP
 CXXFLAGS := -Iinclude -Wall -Wextra $(DEPFLAGS)
-LDFLAGS :=
+LDFLAGS := -lSDL2
 
 # ====================================================
 # Target executable
