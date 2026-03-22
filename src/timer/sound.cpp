@@ -1,4 +1,5 @@
 #include "timer/sound.hpp"
+#include "io/sound.hpp"
 
 namespace chip::Timer {
 
@@ -9,8 +10,12 @@ void Sound::write(uint8_t data) {
 }
 
 void Sound::step() {
-    if (data_ > 0x00) data_--;
-    // beep here later
+    if (data_ > 0x00) {
+        chip::IO::Sound::play();
+        data_--;
+    } else {
+        chip::IO::Sound::stop();
+    }
 }
 
 }
