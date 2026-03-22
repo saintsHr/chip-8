@@ -12,12 +12,12 @@ void Video::clear(bool value) {
     }
 }
 
-void Video::setPixel(uint8_t x, uint8_t y, bool value) {
+void Video::setPixel(int x, int y, bool value) {
     if (x >= 64|| y >= 32) return;
     framebuffer_[y][x] = value;
 }
 
-bool Video::getPixel(uint8_t x, uint8_t y) {
+bool Video::getPixel(int x, int y) {
     if (x >= 64|| y >= 32) return false;
     return framebuffer_[y][x];
 }
