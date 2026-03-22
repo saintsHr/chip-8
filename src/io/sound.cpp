@@ -7,6 +7,8 @@ namespace chip::IO {
 bool Sound::playing_ = false;
 
 void Sound::audioCallback(void* userdata, Uint8* stream, int len) {
+    static_cast<void>(userdata);
+
     static double phase = 0.0;
     Sint16* buffer = (Sint16*)stream;
     int length = len / 2;
