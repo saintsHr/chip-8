@@ -9,3 +9,4 @@
 #include "timer/sound.hpp"
 #include "io/video.hpp"
 #include "io/sound.hpp"
+#include "io/input.hpp"

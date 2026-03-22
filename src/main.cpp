@@ -4,6 +4,7 @@
 #include <random>
 #include <iostream>
 #include <fstream>
+#include <unordered_map>
 
 #define PIXEL_SIZE 16
 
@@ -26,6 +27,14 @@ uint8_t fontset[80] = {
 	0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 };
 
+// --- input map ---
+std::unordered_map<SDL_Keycode, uint8_t> keymap = {
+    {SDLK_1, 0x1}, {SDLK_2, 0x2}, {SDLK_3, 0x3}, {SDLK_4, 0xC},
+    {SDLK_q, 0x4}, {SDLK_w, 0x5}, {SDLK_e, 0x6}, {SDLK_r, 0xD},
+    {SDLK_a, 0x7}, {SDLK_s, 0x8}, {SDLK_d, 0x9}, {SDLK_f, 0xE},
+    {SDLK_z, 0xA}, {SDLK_x, 0x0}, {SDLK_c, 0xB}, {SDLK_v, 0xF}
+};
+
 uint8_t randomByte() {
     static std::random_device rd;
     static std::mt19937 gen(rd());
@@ -33,25 +42,18 @@ uint8_t randomByte() {
     return static_cast<uint8_t>(dist(gen));
 }
 
-bool loadROM(char const* filename) {
-	std::ifstream file(filename, std::ios::binary | std::ios::ate);
+bool loadROM(const char* filename) {
+    std::ifstream file(filename, std::ios::binary);
 
-	if (file.is_open()) {
-		std::streampos size = file.tellg();
-		char* buffer = new char[size];
+    if (!file) return false;
 
-		file.seekg(0, std::ios::beg);
-		file.read(buffer, size);
-		file.close();
+    std::vector<uint8_t> buffer(
+        (std::istreambuf_iterator<char>(file)),
+        std::istreambuf_iterator<char>()
+    );
 
-		for (long i = 0; i < size; ++i) {
-            chip::Memory::RAM::write(0x200 + i, buffer[i]);
-		}
-
-		delete[] buffer;
-	} else {
-        std::cout << "\ncannot open rom\n" << std::endl;
-        return false;
+    for (size_t i = 0; i < buffer.size(); ++i) {
+        chip::Memory::RAM::write(0x200 + i, buffer[i]);
     }
 
     return true;
@@ -95,6 +97,7 @@ int main(int argc, char* argv[]) {
     if (!loadROM(argv[1])) return 1;
 
     // --- main loop ---
+    uint32_t lastTimer = SDL_GetTicks();
     bool running = true;
     SDL_Event event;
 
@@ -102,6 +105,25 @@ int main(int argc, char* argv[]) {
         // --- poll events ---
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) running = false;
+
+            // --- input handler ---
+            if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
+                bool pressed = (event.type == SDL_KEYDOWN);
+
+                auto it = keymap.find(event.key.keysym.sym);
+
+                if (it != keymap.end()) {
+                    chip::IO::Input::setKey(it->second, pressed);
+                }
+            }
+        }
+
+        // --- step timers (60Hz) ---
+        uint32_t now = SDL_GetTicks();
+        if (now - lastTimer >= 16) {
+            chip::Timer::Delay::step();
+            chip::Timer::Sound::step();
+            lastTimer = now;
         }
 
         // --- clears the window
@@ -119,13 +141,8 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // --- steps timers ---
-        chip::Timer::Delay::step();
-        chip::Timer::Sound::step();
-
         // --- presents ---
         SDL_RenderPresent(renderer);
-        SDL_Delay(16);
     }
 
     return 0;
