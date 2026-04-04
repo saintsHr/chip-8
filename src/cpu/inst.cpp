@@ -13,6 +13,67 @@
 
 namespace chip {
 
+void chip::Inst::execute(uint16_t op) {
+    switch (op & 0xF000) {
+
+        case 0x0000:
+            switch (op) {
+                case 0x00E0: INST_00E0(op); break;
+                case 0x00EE: INST_00EE(op); break;
+            }
+            break;
+
+        case 0x1000: INST_1nnn(op); break;
+        case 0x2000: INST_2nnn(op); break;
+        case 0x3000: INST_3xkk(op); break;
+        case 0x4000: INST_4xkk(op); break;
+        case 0x5000: INST_5xy0(op); break;
+        case 0x6000: INST_6xkk(op); break;
+        case 0x7000: INST_7xkk(op); break;
+
+        case 0x8000:
+            switch (op & 0x000F) {
+                case 0x0: INST_8xy0(op); break;
+                case 0x1: INST_8xy1(op); break;
+                case 0x2: INST_8xy2(op); break;
+                case 0x3: INST_8xy3(op); break;
+                case 0x4: INST_8xy4(op); break;
+                case 0x5: INST_8xy5(op); break;
+                case 0x6: INST_8xy6(op); break;
+                case 0x7: INST_8xy7(op); break;
+                case 0xE: INST_8xyE(op); break;
+            }
+            break;
+
+        case 0x9000: INST_9xy0(op); break;
+        case 0xA000: INST_Annn(op); break;
+        case 0xB000: INST_Bnnn(op); break;
+        case 0xC000: INST_Cxkk(op); break;
+        case 0xD000: INST_Dxyn(op); break;
+
+        case 0xE000:
+            switch (op & 0x00FF) {
+                case 0x9E: INST_Ex9E(op); break;
+                case 0xA1: INST_ExA1(op); break;
+            }
+            break;
+
+        case 0xF000:
+            switch (op & 0x00FF) {
+                case 0x07: INST_Fx07(op); break;
+                case 0x0A: INST_Fx0A(op); break;
+                case 0x15: INST_Fx15(op); break;
+                case 0x18: INST_Fx18(op); break;
+                case 0x1E: INST_Fx1E(op); break;
+                case 0x29: INST_Fx29(op); break;
+                case 0x33: INST_Fx33(op); break;
+                case 0x55: INST_Fx55(op); break;
+                case 0x65: INST_Fx65(op); break;
+            }
+            break;
+    }
+}
+
 void Inst::INST_00E0(uint16_t op) {
     static_cast<void>(op);
     chip::IO::Video::clear(0);

@@ -6,6 +6,8 @@ namespace chip {
 
 class Inst {
 public:
+    static void execute(uint16_t opcode);
+
     static void INST_00E0(uint16_t op); // CLS   (Clears display)
     static void INST_00EE(uint16_t op); // RET   (Returns from subroutine)
     static void INST_1nnn(uint16_t op); // JMP   (Jump to address nnn)

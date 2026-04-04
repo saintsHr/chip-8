@@ -6,6 +6,8 @@
 #include <fstream>
 #include <unordered_map>
 
+#include "cpu/inst.hpp"
+
 #define PIXEL_SIZE 16
 
 uint8_t fontset[80] = {
@@ -88,6 +90,7 @@ int main(int argc, char* argv[]) {
 
     // --- loads rom ---
     if (!loadROM(argv[1])) return 1;
+    chip::Memory::Program::write(0x200);
 
     // --- main loop ---
     uint32_t lastTimer = SDL_GetTicks();
@@ -109,6 +112,17 @@ int main(int argc, char* argv[]) {
                     chip::IO::Input::setKey(it->second, pressed);
                 }
             }
+        }
+
+        // --- CPU cycle ---
+        for (int i = 0; i < 8; i++) {
+            uint16_t pc = chip::Memory::Program::read();
+            uint16_t opcode =
+                (chip::Memory::RAM::read(pc) << 8) |
+                (chip::Memory::RAM::read(pc + 1));
+
+            chip::Memory::Program::write(pc + 2);
+            chip::Inst::execute(opcode);
         }
 
         // --- step timers (60Hz) ---
@@ -136,6 +150,8 @@ int main(int argc, char* argv[]) {
 
         // --- presents ---
         SDL_RenderPresent(renderer);
+
+        SDL_Delay(1);
     }
 
     return 0;
