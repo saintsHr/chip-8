@@ -12,4 +12,8 @@ void Delay::step() {
     if (data_ > 0x00) data_--;
 }
 
+uint16_t Delay::get() {
+    return data_;
+}
+
 }

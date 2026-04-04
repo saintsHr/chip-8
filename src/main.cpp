@@ -35,13 +35,6 @@ std::unordered_map<SDL_Keycode, uint8_t> keymap = {
     {SDLK_z, 0xA}, {SDLK_x, 0x0}, {SDLK_c, 0xB}, {SDLK_v, 0xF}
 };
 
-uint8_t randomByte() {
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    static std::uniform_int_distribution<int> dist(0, 255);
-    return static_cast<uint8_t>(dist(gen));
-}
-
 bool loadROM(const char* filename) {
     std::ifstream file(filename, std::ios::binary);
 

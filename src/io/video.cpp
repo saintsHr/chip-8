@@ -22,4 +22,10 @@ bool Video::getPixel(int x, int y) {
     return framebuffer_[y][x];
 }
 
+bool Video::xorPixel(int x, int y) {
+    bool previous = framebuffer_[y][x];
+    framebuffer_[y][x] ^= 1;
+    return previous && !framebuffer_[y][x];
+}
+
 }
